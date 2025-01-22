@@ -19,7 +19,33 @@ const CreateProduct = ({ colors, sizes, heel_heights, categories }) => {
     sizes: [],
     heel_heights: [],
     categories: [],
+    description: '',
+    front_image: null,
+    gallery_images: []
   });
+
+    const [preUploadedFrontImage, setPreUploadedFrontImage] = useState(null);
+    const [preUploadedGalleryImages, setPreUploadedGalleryImages] = useState([]);
+
+    const handleFrontImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreUploadedFrontImage(URL.createObjectURL(file));
+            setData('front_image', file);
+        }
+    };
+
+    const handleGalleryImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        const filePreviews = files.map(file => URL.createObjectURL(file));
+        setPreUploadedGalleryImages(prev => [...prev, ...filePreviews]);
+        setData('gallery_images', [...data.gallery_images, ...files]);
+    };
+
+    const handleGalleryImageRemove = (index) => {
+        setPreUploadedGalleryImages(prev => prev.filter((_, i) => i !== index));
+        setData('gallery_images', data.gallery_images.filter((_, i) => i !== index));
+    };
 
   const handleSubmit = (e) => {
     console.log(data);
@@ -42,6 +68,50 @@ const CreateProduct = ({ colors, sizes, heel_heights, categories }) => {
                             <div className="container mx-auto p-6">
                                 <h1 className="text-2xl font-bold mb-4">Add Product</h1>
                                 <div>
+                                    <div className="mb-4">
+                                        <InputLabel for="front_image" value="Upload Front Image" />
+                                        <input
+                                            type="file"
+                                            id="front_image"
+                                            onChange={handleFrontImageChange}
+                                            className="block w-full text-sm text-gray-500 border rounded"
+                                        />
+                                        {preUploadedFrontImage && (
+                                            <div className="mt-2">
+                                                <img
+                                                    src={preUploadedFrontImage}
+                                                    alt="Front Preview"
+                                                    className="w-full h-32 object-cover rounded"
+                                                />
+                                            </div>
+                                        )}
+                                        <InputError message={errors.front_image} />
+                                    </div>
+                                    <div className="mb-4">
+                                        <InputLabel for="gallery_images" value="Upload Gallery Images" />
+                                        <input
+                                            type="file"
+                                            id="gallery_images"
+                                            multiple
+                                            onChange={handleGalleryImagesChange}
+                                            className="block w-full text-sm text-gray-500 border rounded"
+                                        />
+                                        <div className="mt-2 grid grid-cols-4 gap-2">
+                                            {preUploadedGalleryImages.map((src, index) => (
+                                                <div key={index} className="relative">
+                                                    <img src={src} alt="Gallery Preview" className="w-full h-32 object-cover rounded" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleGalleryImageRemove(index)}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1"
+                                                    >
+                                                        X
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <InputError message={errors.gallery_images} />
+                                    </div>
                                     <div className="mb-4">
                                         <InputLabel for="name" value="Product Name" />
                                         <TextInput
@@ -172,6 +242,18 @@ const CreateProduct = ({ colors, sizes, heel_heights, categories }) => {
                                             availableCategories={categories}
                                         />
                                         <InputError message={errors.categories} />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <InputLabel for="description" value="Description" />
+                                        <textarea
+                                            id="description"
+                                            name="description"
+                                            value={data.description}
+                                            onChange={(e) => setData('description', e.target.value)}
+                                            className="w-full border px-4 py-2"
+                                        />
+                                        <InputError message={errors.description} />
                                     </div>
 
                                     {/* Repeat similar fields for HeelHeights, Heel Heights, Categories */}

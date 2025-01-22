@@ -3,6 +3,7 @@
 use App\Http\Controllers\Inventory\ProductsController;
 use App\Http\Controllers\Inventory\StockLevelController;
 use App\Http\Controllers\Inventory\WarehouseController;
+use App\Http\Controllers\WelcomeController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,16 @@ use App\Http\Controllers\GlobalSettings\SizeValueController;
 use App\Http\Controllers\GlobalSettings\HeelHeightController;
 
 Route::get('/', function () {
-    return Redirect()->route('login');
+    // $images = PageSections::with('images')->get();
+
+    // dd($images);
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+        // 'images' => $images
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -45,6 +55,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/inventory/products', ProductsController::class);
     Route::post('/inventory/products/variants', [ProductsController::class, 'store_variants']);
     
+    Route::post('/inventory/product/front_image/upload', [ProductsController::class, 'update_front_image']);
+    Route::post('/inventory/product/gallery_images/upload', [ProductsController::class, 'update_gallery_images']);
+    Route::post('/inventory/product/gallery_image/delete', [ProductsController::class, 'destroy_gallery_image']);
+
     Route::resource('/inventory/stocks', StockLevelController::class);
     
     Route::resource('/inventory/warehouses', WarehouseController::class);

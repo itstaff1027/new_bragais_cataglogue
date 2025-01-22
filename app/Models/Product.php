@@ -16,7 +16,9 @@ class Product extends Model
         'product_name',
         'status',
         'cost',
-        'srp'
+        'srp',
+        'description',
+        'front_image'
     ];
 
     public function colors()
@@ -37,5 +39,10 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Categories::class, 'products_categories', 'product_id', 'category_id');
+    }
+
+    public function galleryImages()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
 }

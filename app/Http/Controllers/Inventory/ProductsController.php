@@ -7,10 +7,12 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Categories;
 use App\Models\HeelHeight;
+use App\Models\SizeValues;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
-use App\Models\SizeValues;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -43,28 +45,46 @@ class ProductsController extends Controller
             'sizes' => 'array',
             'heel_heights' => 'array',
             'categories' => 'array',
+            'description' => 'required|string|max:255',
+            'front_image' => 'required|image|mimes:webp,jpeg,png',
+            'gallery_images' => 'required|array|min:1',
+            'gallery_images.*' => 'required|image|mimes:webp,jpeg,png',
         ]);
-
-        // Extract only the 'id' from the colors, sizes, heel_heights, and categories arrays
-        $colorIds = collect($validated['colors'])->pluck('id');
-        $sizeIds = collect($validated['sizes'])->pluck('id');
-        $heelHeightIds = collect($validated['heel_heights'])->pluck('id');
-        $categoryIds = collect($validated['categories'])->pluck('id');
-
+    
+        $uploadedFrontImage = $request->file('front_image');
+        $frontImagePath = Storage::disk('do')->putFileAs('product_images', $uploadedFrontImage, $uploadedFrontImage->getClientOriginalName());
+    
         $product = Product::create([
             'product_name' => $validated['product_name'],
             'status' => $validated['status'],
             'cost' => $validated['cost'],
             'srp' => $validated['srp'],
+            'front_image' => $frontImagePath,
+            'description' => $validated['description'],
         ]);
-
+    
+        $galleryImages = $request->file('gallery_images');
+        $galleryImageData = [];
+        foreach ($galleryImages as $image) {
+            $path = Storage::disk('do')->putFileAs('gallery_images', $image, $image->getClientOriginalName());
+            $galleryImageData[] = ['image_path' => $path, 'is_active' => true];
+        }
+    
+        $product->galleryImages()->createMany($galleryImageData);
+    
+        $colorIds = collect($validated['colors'])->pluck('id');
+        $sizeIds = collect($validated['sizes'])->pluck('id');
+        $heelHeightIds = collect($validated['heel_heights'])->pluck('id');
+        $categoryIds = collect($validated['categories'])->pluck('id');
+    
         $product->colors()->sync($colorIds);
         $product->sizes()->sync($sizeIds);
         $product->heelHeights()->sync($heelHeightIds);
         $product->categories()->sync($categoryIds);
-
+    
         return redirect()->route('products.index')->with('success', 'Product created successfully!');
     }
+    
 
     public function show($id){
         $product = Product::with(['colors', 'sizes:id,size_name', 'heelHeights', 'categories', 'sizes.sizeValues'])->find($id);
@@ -90,7 +110,7 @@ class ProductsController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['colors', 'sizes', 'heelHeights', 'categories'])->findOrFail($id);
+        $product = Product::with(['colors', 'sizes', 'heelHeights', 'categories', 'galleryImages'])->findOrFail($id);
         return inertia('Inventory/Products/Edit/Page', [
             'product' => $product,
             'colors' => Color::all(),
@@ -103,6 +123,7 @@ class ProductsController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request);
         $validated = $request->validate([
             'product_name' => 'required|string|max:255',
             'status' => 'required|string',
@@ -112,22 +133,27 @@ class ProductsController extends Controller
             'sizes' => 'array',
             'heel_heights' => 'array',
             'categories' => 'array',
+            'description' => 'required|string|max:255'
         ]);
 
-        // Extract only the 'id' from the colors, sizes, heel_heights, and categories arrays
+        // Extract relationships
         $colorIds = collect($validated['colors'])->pluck('id');
         $sizeIds = collect($validated['sizes'])->pluck('id');
         $heelHeightIds = collect($validated['heel_heights'])->pluck('id');
         $categoryIds = collect($validated['categories'])->pluck('id');
 
         $product = Product::findOrFail($id);
+
+        // Update main product details
         $product->update([
             'product_name' => $validated['product_name'],
             'status' => $validated['status'],
             'cost' => $validated['cost'],
             'srp' => $validated['srp'],
+            'description' => $request->input('description')
         ]);
 
+        // Sync relationships
         $product->colors()->sync($colorIds);
         $product->sizes()->sync($sizeIds);
         $product->heelHeights()->sync($heelHeightIds);
@@ -135,6 +161,58 @@ class ProductsController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
+
+    public function update_front_image(Request $request)
+    {
+
+        // dd($request);
+        $validated = $request->validate([
+            'front_image' => 'required|image|mimes:webp,jpeg,png',
+        ]);
+
+        $product = Product::findOrFail($request->id);
+        if ($product->front_image) {
+            Storage::disk('do')->delete($product->front_image);
+        }
+
+        $uploadedFrontImage = $request->file('front_image');
+        // dd($uploadedFrontImage);
+        $path = Storage::disk('do')->putFile('product_images', $uploadedFrontImage);
+        $product->update(['front_image' => $path]);
+
+        return redirect()->back()->with('success', 'Front image updated successfully.');
+    }
+
+    public function update_gallery_images(Request $request)
+    {
+        $validated = $request->validate([
+            'gallery_images.*' => 'required|image|mimes:webp,jpeg,png',
+        ]);
+
+        $product = Product::findOrFail($request->id);
+        $galleryImageData = [];
+
+        foreach ($request->file('gallery_images') as $image) {
+            $path = Storage::disk('do')->putFile('gallery_images', $image);
+            $galleryImageData[] = ['image_path' => $path, 'product_id' => $product->id];
+        }
+
+        $product->galleryImages()->createMany($galleryImageData);
+
+        return redirect()->back()->with('success', 'Product Gallery Images successfully udpated!');
+    }
+
+    public function destroy_gallery_image(Request $request)
+    {
+        $image = ProductImage::findOrFail($request->id);
+        Storage::disk('do')->delete($image->image_path);
+        $image->delete();
+
+        return redirect()->back()->with('success', 'Product Gallery Image successfully deleted!');
+    }
+
+
+
 
     public function destroy($id)
     {
