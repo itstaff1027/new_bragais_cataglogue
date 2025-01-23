@@ -1,35 +1,41 @@
 <?php
 
-use App\Http\Controllers\Inventory\ProductsController;
-use App\Http\Controllers\Inventory\StockLevelController;
-use App\Http\Controllers\Inventory\WarehouseController;
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ContentsManagement\WomenController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\Inventory\ProductsController;
 use App\Http\Controllers\GlobalSettings\SizeController;
+use App\Http\Controllers\Inventory\WarehouseController;
 use App\Http\Controllers\GlobalSettings\ColorController;
+use App\Http\Controllers\Inventory\StockLevelController;
+use App\Http\Controllers\GlobalSettings\FilterController;
 use App\Http\Controllers\GlobalSettings\CategoryController;
 use App\Http\Controllers\GlobalSettings\OrderTypeController;
 use App\Http\Controllers\GlobalSettings\SizeValueController;
 use App\Http\Controllers\GlobalSettings\HeelHeightController;
+use App\Http\Controllers\GlobalSettings\FilterProductController;
+use App\Http\Controllers\Web\WomenIndexController;
 
-Route::get('/', function () {
-    // $images = PageSections::with('images')->get();
+// Route::get('/', function () {
+//     // $images = PageSections::with('images')->get();
 
-    // dd($images);
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        // 'images' => $images
-    ]);
-});
+//     // dd($images);
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//         // 'images' => $images
+//     ]);
+// });
+
+Route::get('/', [WomenIndexController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -62,6 +68,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/inventory/stocks', StockLevelController::class);
     
     Route::resource('/inventory/warehouses', WarehouseController::class);
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function (){
+    Route::resource('/content_womens', WomenController::class);
+    Route::resource('/settings_filters', FilterController::class);
+    Route::resource('/settings_filter_products', FilterProductController::class);
 });
 
 Route::get('/settings', function () {

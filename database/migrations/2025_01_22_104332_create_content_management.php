@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('featured_images', function (Blueprint $table) {
             $table->id();
             $table->string('section_name'); // 'top', 'body', etc.
+            $table->string('category')->default('general'); // 'womens', 'mens', 'general', etc.
             $table->string('image_path');
             $table->text('header')->nullable();
             $table->text('sub_header')->nullable();
@@ -28,6 +29,7 @@ return new class extends Migration
         Schema::create('filters', function (Blueprint $table) {
             $table->id();
             $table->string('filter_name'); // 'New', 'Old', 'Best', etc.
+            $table->string('category')->default('general');
             $table->timestamps();
         });
 
@@ -47,6 +49,7 @@ return new class extends Migration
         Schema::create('new_arrivals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('category')->default('general');
             $table->text('header')->nullable();
             $table->text('sub_header')->nullable();
             $table->text('description_1')->nullable();
@@ -58,6 +61,7 @@ return new class extends Migration
         Schema::create('featured_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('category')->default('general');
             $table->text('header')->nullable();
             $table->text('sub_header')->nullable();
             $table->text('description_1')->nullable();
