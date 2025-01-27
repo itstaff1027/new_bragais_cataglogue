@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\ContentsManagement\BannerController;
 use App\Http\Controllers\ContentsManagement\WomenController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContentsManagement\FeaturedProduct;
+use App\Http\Controllers\ContentsManagement\NewArrivalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\PermissionsController;
@@ -35,7 +38,13 @@ use App\Http\Controllers\Web\WomenIndexController;
 //     ]);
 // });
 
+Route::get('/coming_soon', function () {
+    return inertia('Blanks/ComingSoon');
+});
+
 Route::get('/', [WomenIndexController::class, 'index']);
+Route::get('/product/{category}/{id}', [WomenIndexController::class, 'show_product']);
+Route::get('/all_womens/products', [WomenIndexController::class, 'show_all_products']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -72,6 +81,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function (){
     Route::resource('/content_womens', WomenController::class);
+    Route::resource('/featured_product_womens', FeaturedProduct::class);
+    Route::resource('/new_arrival_product_womens', NewArrivalController::class);
+
+    Route::resource('/content_banners', BannerController::class);
+    Route::post('/content_banners/update/image', [BannerController::class, 'update_banner_image']);
+
+    //change women controller to men if available 
+    Route::resource('/content_mens', WomenController::class);
+    Route::resource('/featured_product_mens', FeaturedProduct::class);
+    Route::resource('/new_arrival_product_mens', FeaturedProduct::class);
+
     Route::resource('/settings_filters', FilterController::class);
     Route::resource('/settings_filter_products', FilterProductController::class);
 });
