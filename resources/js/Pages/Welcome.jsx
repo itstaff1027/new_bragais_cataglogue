@@ -44,7 +44,7 @@ export default function Welcome({ laravelVersion, phpVersion, images }) {
             }
         >
             {/* <Head title="JOJO BRAGAIS" /> */}
-            <div className="bg-[#020E29] min-h-screen">
+            <div className=" min-h-screen">
 
             {/* Top Fullscreen Image */}
             <section className="relative mt-8">

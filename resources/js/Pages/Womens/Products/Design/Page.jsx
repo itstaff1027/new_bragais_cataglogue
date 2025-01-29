@@ -49,11 +49,11 @@ export default function Womens({ product }) {
                 </h2>
             }
         >
-            <div className="bg-[#020E29] pt-8 min-h-screen">
+            <div className="pt-8 min-h-screen">
                 <div className="w-full flex flex-col lg:flex-row gap-6 px-6">
 
                     {/* Left Side - Product Images */}
-                    <div className="lg:w-[75%] w-full h-auto border border-gray-700 bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <div className="lg:w-[75%] w-full h-auto border border-gray-700]rounded-lg overflow-hidden shadow-lg">
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
                             {product.gallery_images.map((image, index) => (
                                 <img 
@@ -67,10 +67,10 @@ export default function Womens({ product }) {
                     </div>
 
                     {/* Right Side - Product Details */}
-                    <div className="lg:w-[25%] w-full border border-gray-700 bg-gray-900 rounded-lg p-6 text-white shadow-lg">
+                    <div className="lg:w-[25%] w-full border  rounded-lg p-6  shadow-lg">
                         <h1 className="text-3xl font-bold mb-0">{product.product_name}</h1>
                         <h1 className="text-1xl font-bold text-gray-400 mb-4">{product.categories[0].category_name}</h1>
-                        <p className="text-gray-300 mb-6">{product.description}</p>
+                        <p className="mb-6">{product.description}</p>
 
                         <div className="mb-6">
                             <h2 className="text-lg font-semibold mb-2">Colors</h2>
@@ -89,7 +89,7 @@ export default function Womens({ product }) {
                             <div className="flex space-x-4">
                                 {product.heel_heights.map((heels, index) => (
                                     <div key={index} className="flex items-center space-x-2">
-                                        <span className="bg-slate-500 p-2 rounded-xl text-sm">{heels.value}</span>
+                                        <span className="bg-slate-500 p-2 text-white rounded-xl text-sm">{heels.value}</span>
                                     </div>
                                 ))}
                             </div>
@@ -102,7 +102,7 @@ export default function Womens({ product }) {
                                     <h3 className="text-md font-medium underline underline-offset-4 mb-2">{size.size_name}</h3>
                                     <div className="flex flex-wrap gap-2">
                                         {size.size_values.map((value, idx) => (
-                                            <span key={idx} className="px-3 py-1 bg-gray-700 rounded-md text-sm">
+                                            <span key={idx} className="px-3 py-1 bg-gray-700 text-white rounded-md text-sm">
                                                 {Math.floor(value.size_values)}
                                             </span>
                                         ))}
@@ -115,7 +115,7 @@ export default function Womens({ product }) {
                             <h2 className="text-lg font-semibold mb-2">Size Guide</h2>
 
                             <h3 className="text-md font-medium mb-2">For 5 & 6.5 inches Pageant Shoes</h3>
-                            <table  className="w-full text-sm text-left text-gray-300 bg-gray-800 border border-gray-600 rounded-lg">
+                            <table  className="w-full text-sm text-left border border-gray-600 rounded-lg">
                                 <thead  className="bg-gray-700 text-gray-400">
                                     <tr>
                                         <th className="py-2 px-4 border-b border-gray-600">US</th>
@@ -125,7 +125,7 @@ export default function Womens({ product }) {
                                 </thead>
                                 <tbody>
                                     {adultPageantSizes.map((size) => (
-                                        <tr key={size.id} className="hover:bg-gray-700 transition-colors">
+                                        <tr key={size.id} className="hover:bg-white transition-colors">
                                             <td className="py-2 px-4 border-b border-gray-600">{size.us}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.length_in}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.round_cm}</td>
@@ -135,7 +135,7 @@ export default function Womens({ product }) {
                             </table>
 
                             <h3 className="text-md font-medium mb-2">For Kids Pageant Shoes</h3>
-                            <table  className="w-full text-sm text-left text-gray-300 bg-gray-800 border border-gray-600 rounded-lg">
+                            <table  className="w-full text-sm text-left  border border-gray-600 rounded-lg">
                                 <thead className="bg-gray-700 text-gray-400">
                                     <tr>
                                         <th className="py-2 px-4 border-b border-gray-600">US</th>
@@ -145,7 +145,7 @@ export default function Womens({ product }) {
                                 </thead>
                                 <tbody>
                                     {kidPageantSizes.map((size) => (
-                                        <tr key={size.id} className="hover:bg-gray-700 transition-colors">
+                                        <tr key={size.id} className="hover:bg-white transition-colors">
                                             <td className="py-2 px-4 border-b border-gray-600">{size.us}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.length_in}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.round_cm}</td>
@@ -155,7 +155,7 @@ export default function Womens({ product }) {
                             </table>
 
                             <h3 className="text-md font-medium mb-2">For 4 & 5.5 inches Pageant Shoes</h3>
-                            <table className="w-full text-sm text-left text-gray-300 bg-gray-800 border border-gray-600 rounded-lg">
+                            <table className="w-full text-sm text-left  border border-gray-600 rounded-lg">
                                 <thead className="bg-gray-700 text-gray-400">
                                     <tr>
                                         <th className="py-2 px-4 border-b border-gray-600">EURO</th>
@@ -165,7 +165,7 @@ export default function Womens({ product }) {
                                 </thead>
                                 <tbody>
                                     {euroPageantSizes.map((size) => (
-                                        <tr key={size.id} className="hover:bg-gray-700 transition-colors">
+                                        <tr key={size.id} className="hover:bg-white transition-colors">
                                             <td className="py-2 px-4 border-b border-gray-600">{size.us}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.length_cm}</td>
                                             <td className="py-2 px-4 border-b border-gray-600">{size.round_cm}</td>
@@ -175,7 +175,7 @@ export default function Womens({ product }) {
                             </table>
                         </div>
 
-                        <p className="text-sm text-gray-300">For more information Kindly reach out to our Official Agents or Message us in our Social Media Platforms below</p>
+                        <p className="text-sm">For more information Kindly reach out to our Official Agents or Message us in our Social Media Platforms below</p>
                     </div>
                 </div>
             </div>

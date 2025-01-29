@@ -40,11 +40,11 @@ use App\Http\Controllers\Web\WomenIndexController;
 
 Route::get('/coming_soon', function () {
     return inertia('Blanks/ComingSoon');
-});
+})->middleware('security_headers');
 
-Route::get('/', [WomenIndexController::class, 'index']);
-Route::get('/product/{category}/{id}', [WomenIndexController::class, 'show_product']);
-Route::get('/all_womens/products', [WomenIndexController::class, 'show_all_products']);
+Route::get('/', [WomenIndexController::class, 'index'])->middleware('security_headers');
+Route::get('/product/{category}/{id}', [WomenIndexController::class, 'show_product'])->middleware('security_headers');
+Route::get('/all_womens/products', [WomenIndexController::class, 'show_all_products'])->name('all_womens_products')->middleware('security_headers');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

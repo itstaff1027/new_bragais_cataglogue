@@ -1,41 +1,26 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { urlPath, womens } from '@/Components/Constants/Value';
 
-export default function AllWomensProducts({ products, heel_heights, categories, banner }) {
-    const [activeCategories, setActiveCategories] = useState([]);
-    const [activeHeelHeights, setActiveHeelHeights] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState(products);
+export default function AllWomensProducts({ products, heel_heights, categories, banner, appliedFilters }) {
+    const [selectedCategory, setSelectedCategory] = useState(appliedFilters.category_id || '');
+    const [selectedHeelHeight, setSelectedHeelHeight] = useState(appliedFilters.heel_height_id || '');
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    useEffect(() => {
-        let filtered = products;
+    // useEffect(() => {
+    //     console.log("Filters Applied:", { selectedCategory, selectedHeelHeight });
+    // }, [selectedCategory, selectedHeelHeight]);
 
-        if (activeCategories.length > 0) {
-            filtered = filtered.filter(product =>
-                product.categories.some(category => activeCategories.includes(category.id))
-            );
-        }
-
-        if (activeHeelHeights.length > 0) {
-            filtered = filtered.filter(product =>
-                product.heel_heights.some(heelHeight => activeHeelHeights.includes(heelHeight.id))
-            );
-        }
-
-        setFilteredProducts(filtered);
-    }, [activeCategories, activeHeelHeights, products]);
-
-    const toggleCategoryFilter = (id) => {
-        setActiveCategories((prev) =>
-            prev.includes(id) ? prev.filter((categoryId) => categoryId !== id) : [...prev, id]
-        );
-    };
-
-    const toggleHeelHeightFilter = (id) => {
-        setActiveHeelHeights((prev) =>
-            prev.includes(id) ? prev.filter((heelId) => heelId !== id) : [...prev, id]
-        );
+    // Handle Filtering & Fetch Data
+    const handleFilter = () => {
+        router.get('/all_womens/products', {
+            category_id: selectedCategory,
+            heel_height_id: selectedHeelHeight,
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
     return (
@@ -46,115 +31,111 @@ export default function AllWomensProducts({ products, heel_heights, categories, 
                 </h2>
             }
         >
-            <div className="bg-[#020E29] pt-6 min-h-screen">
-                <div className="container mx-auto px-6">
-                    {/* Filters Section */}
-                    <div className="mb-8">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-400">Filter by Category</h3>
-                        <div className="flex flex-wrap gap-3">
-                            {categories?.map((filter) => (
-                                <button
-                                    key={filter.id}
-                                    className={`px-4 py-2 text-sm font-medium rounded-lg shadow transition-all border ${
-                                        activeCategories.includes(filter.id)
-                                            ? 'bg-blue-600 text-white border-blue-600'
-                                            : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-200'
-                                    }`}
-                                    onClick={() => toggleCategoryFilter(filter.id)}
-                                >
-                                    {filter.category_name}
-                                </button>
-                            ))}
-                        </div>
+            <div className="pt-6 min-h-screen">
+                <div className="container mx-auto px-6 relative">
+
+                    {/* Filter Button */}
+                    <div className="flex justify-between items-center mb-6">
+                        <button 
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                            onClick={() => setIsFilterOpen(true)}
+                        >
+                            Filter
+                        </button>
                     </div>
 
-                    <div className="mb-8">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-400">Filter by Heel Height</h3>
-                        <div className="flex flex-wrap gap-3">
-                            {heel_heights?.map((filter) => (
-                                <button
-                                    key={filter.id}
-                                    className={`px-4 py-2 text-sm font-medium rounded-lg shadow transition-all border ${
-                                        activeHeelHeights.includes(filter.id)
-                                            ? 'bg-green-600 text-white border-green-600'
-                                            : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-200'
-                                    }`}
-                                    onClick={() => toggleHeelHeightFilter(filter.id)}
-                                >
-                                    {filter.value}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Sliding Filter Panel */}
+                    <div className={`fixed top-0 right-0 h-full bg-white shadow-lg w-72 p-6 transition-transform duration-300 ease-in-out ${
+                        isFilterOpen ? "translate-x-0" : "translate-x-full"
+                    } z-50`}>
+                        {/* Close Button */}
+                        <button 
+                            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                            onClick={() => setIsFilterOpen(false)}
+                        >
+                            ✖
+                        </button>
 
-                    {/* Selected Filters Badges */}
-                    <div className="mb-8 flex flex-wrap gap-2">
-                        {activeCategories.length > 0 && (
-                            <div className="flex gap-2 items-center">
-                                <span className="text-sm font-semibold text-gray-600">Selected Categories:</span>
-                                {categories
-                                    .filter((cat) => activeCategories.includes(cat.id))
-                                    .map((cat) => (
-                                        <span
-                                            key={cat.id}
-                                            className="px-3 py-1 bg-blue-200 text-blue-800 text-xs font-medium rounded-full"
-                                        >
-                                            {cat.category_name}
-                                        </span>
-                                    ))}
-                            </div>
-                        )}
-                        {activeHeelHeights.length > 0 && (
-                            <div className="flex gap-2 items-center">
-                                <span className="text-sm font-semibold text-gray-600">Selected Heel Heights:</span>
-                                {heel_heights
-                                    .filter((heel) => activeHeelHeights.includes(heel.id))
-                                    .map((heel) => (
-                                        <span
-                                            key={heel.id}
-                                            className="px-3 py-1 bg-green-200 text-green-800 text-xs font-medium rounded-full"
-                                        >
-                                            {heel.value}
-                                        </span>
-                                    ))}
-                            </div>
-                        )}
+                        <h3 className="text-xl font-semibold mb-4">Filters</h3>
+
+                        {/* Category Filter */}
+                        <div className="mb-4">
+                            <label className="block font-medium mb-2">Category</label>
+                            <select
+                                className="border rounded px-4 py-2 w-full"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                                <option value="">All Categories</option>
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.category_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Heel Height Filter */}
+                        <div className="mb-4">
+                            <label className="block font-medium mb-2">Heel Height</label>
+                            <select
+                                className="border rounded px-4 py-2 w-full"
+                                value={selectedHeelHeight}
+                                onChange={(e) => setSelectedHeelHeight(e.target.value)}
+                            >
+                                <option value="">All Heel Heights</option>
+                                {heel_heights.map((heelHeight) => (
+                                    <option key={heelHeight.id} value={heelHeight.id}>
+                                        {heelHeight.value}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Apply Filters Button */}
+                        <button 
+                            className="bg-green-500 text-white px-4 py-2 rounded w-full hover:bg-green-600 transition"
+                            onClick={handleFilter}
+                        >
+                            Apply Filters
+                        </button>
                     </div>
 
                     {/* Product Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {filteredProducts.map((product, i) => (
-                            <div
-                                key={i}
-                                className="bg-white rounded-lg shadow-md overflow-hidden hover:scale-105 transition-transform"
-                            >
-                                <img
-                                    src={`${urlPath}${product.front_image}`}
-                                    alt={`Product ${product.product_name}`}
-                                    className="h-auto w-full object-cover"
-                                />
-                                <div className="p-4">
-                                    <h2 className="text-lg font-semibold text-gray-800">{product.product_name}</h2>
-                                    {product.header && (
-                                        <p className="text-sm text-gray-600">{product.header}</p>
-                                    )}
-                                    {product.sub_header && (
-                                        <p className="text-xs text-gray-500">{product.sub_header}</p>
-                                    )}
-                                    {product.description_1 && (
-                                        <p className="text-xs text-gray-400 mt-2">
-                                            {product.description_1}
-                                        </p>
-                                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
+                        {products.data.length > 0 ? (
+                            products.data.map((product, i) => (
+                                <div key={i} className="bg-white rounded-lg shadow-md">
+                                    <a href={`/product/womens/${product.id}`}>
+                                        <img src={`${urlPath}${product.front_image}`} alt={product.product_name} className="h-auto w-full" />
+                                    </a>
+                                    <div className="p-4">
+                                        <a href={`/product/womens/${product.id}`} className="hover:underline">
+                                            <h2 className="text-lg font-semibold">{product.product_name}</h2>
+                                        </a>
+                                        
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-500 mt-8">No products found.</p>
+                        )}
                     </div>
 
-                    {filteredProducts.length === 0 && (
-                        <p className="text-center text-gray-500 mt-8">
-                            No products match your selected filters.
-                        </p>
+                    {/* Pagination with Filters Maintained */}
+                    {products.links.length > 0 && (
+                        <nav className="flex justify-center mt-6">
+                            {products.links.map((link, index) => (
+                                <Link
+                                    key={index}
+                                    href={link.url ? `${link.url}&category_id=${selectedCategory}&heel_height_id=${selectedHeelHeight}` : '#'}
+                                    className={`px-4 py-2 mx-1 rounded ${
+                                        link.active ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                                    }`}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                />
+                            ))}
+                        </nav>
                     )}
                 </div>
 

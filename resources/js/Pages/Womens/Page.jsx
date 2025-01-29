@@ -22,7 +22,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                 </h2>
             }
         >
-            <div className="bg-[#020E29] min-h-screen">
+            <div className=" min-h-screen">
                 {/* Top Fullscreen Image */}
                 {featured_images
                     ?.filter((top_section) => top_section.section_name === top)
@@ -37,8 +37,8 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     ))}
 
                 {/* First Product Carousel: Featured Products */}
-                <section className="py-16">
-                    <h2 className="text-center text-white text-2xl mb-8">Featured Products</h2>
+                <section className="pt-8 pb-4">
+                    <h2 className="text-center text-2xl mb-8">Featured</h2>
                     <div className="carousel-container flex space-x-6 overflow-x-auto px-6 sm:px-12 md:px-24 lg:px-32 scrollbar-hide">
                         {featured_products
                             ?.filter((featured_product) => featured_product.category === womens)
@@ -73,22 +73,10 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     </div>
                 </section>
 
-                {/* Second Fullscreen Image */}
-                {featured_images
-                    ?.filter((top_section) => top_section.section_name === body)
-                    .map((body_image, i) => (
-                        <section key={i} className="relative mt-8">
-                            <img
-                                src={`${urlPath}${body_image.image_path}`}
-                                alt={`Body Section ${i}`}
-                                className="relative inset-0 w-full h-auto object-cover"
-                            />
-                        </section>
-                    ))}
-
+                
                 {/* Second Product Carousel: New Arrivals */}
-                <section className="py-16">
-                    <h2 className="text-center text-white text-2xl mb-8">New Arrivals</h2>
+                <section className="py-8">
+                    <h2 className="text-center text-2xl mb-8">New Arrivals</h2>
                     <div className="carousel-container flex space-x-6 overflow-x-auto px-6 sm:px-12 md:px-24 lg:px-32 scrollbar-hide">
                         {new_arrivals
                             ?.filter((new_arrival) => new_arrival.category === womens)
@@ -123,8 +111,21 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     </div>
                 </section>
 
+                {/* Second Fullscreen Image */}
+                {featured_images
+                    ?.filter((top_section) => top_section.section_name === body)
+                    .map((body_image, i) => (
+                        <section key={i} className="relative mt-8">
+                            <img
+                                src={`${urlPath}${body_image.image_path}`}
+                                alt={`Body Section ${i}`}
+                                className="relative inset-0 w-full h-auto object-cover"
+                            />
+                        </section>
+                    ))}
+
                 {/* Filter Section */}
-                <section className="py-16 bg-gray-100">
+                <section className="py-16">
                     {/* Filter Buttons */}
                     <div className="flex flex-wrap justify-start items-center gap-4 mb-8 px-6">
                         {filters
@@ -156,7 +157,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                 .map((product, i) => (
                                     <div
                                         key={i}
-                                        className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform w-64 flex-shrink-0"
+                                        className="bg-gray-300 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform w-64 flex-shrink-0"
                                     >
                                         <a
                                             href={`/product/${product.category}/${product.product_id}`}
@@ -169,9 +170,14 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                         </a>
                                         <div className="p-4">
                                             {product.products.product_name && (
-                                                <h1 className="text-lg font-semibold text-gray-800">
-                                                    {product.products.product_name}
-                                                </h1>
+                                                <a
+                                                    href={`/product/${product.category}/${product.product_id}`}
+                                                    className="hover:underline"
+                                                >
+                                                    <h1 className="text-lg font-semibold text-gray-800">
+                                                        {product.products.product_name}
+                                                    </h1>
+                                                </a>
                                             )}
                                         </div>
                                     </div>
@@ -185,7 +191,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                             href="/all_womens/products"
                             className="px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                         >
-                            View All Products
+                            View All Womens
                         </a>
                     </div>
                 </section>

@@ -21,7 +21,7 @@ export default function ComingSoon({  }) {
             }
         >
             {/* <Head title="JOJO BRAGAIS" /> */}
-            <div className="bg-[#020E29] min-h-screen flex justify-center items-center text-white">
+            <div className="min-h-screen flex justify-center items-center text-white">
 
                 <h1 className="text-3xl">Coming Soon!</h1>
 

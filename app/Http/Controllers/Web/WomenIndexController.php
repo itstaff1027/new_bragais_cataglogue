@@ -105,38 +105,40 @@ class WomenIndexController extends Controller
         //
     }
 
-    public function show_all_products()
+    public function show_all_products(Request $request)
     {
-        $products = Product::with([
-            'colors',
+        $query = Product::with([
             'colors:id,color_name,hex',
-            'sizes',
-            'sizes.sizeValues',
             'sizes:id,size_name',
             'sizes.sizeValues:id,size_values,size_id',
-            'heelHeights',
             'heelHeights:id,name,value',
-            'categories',
             'categories:id,category_name,category_label',
-            'galleryImages',
             'galleryImages:id,product_id,image_path'
-        ])
-        ->get([
-            'id',
-            'product_name',
-            'status',
-            'front_image',
-            'description'
         ]);
-
-        // dd(HeelHeight::all());
-
+    
+        // Apply category filter
+        if ($request->has('category_id') && $request->category_id) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
+    
+        // Apply heel height filter
+        if ($request->has('heel_height_id') && $request->heel_height_id) {
+            $query->whereHas('heelHeights', function ($q) use ($request) {
+                $q->where('heel_heights.id', $request->heel_height_id);
+            });
+        }
+    
+        $products = $query->paginate(12)->appends($request->query()); // Maintain filter parameters in pagination links
+    
         return inertia('Womens/Products/Page', [
             'products' => $products,
             'heel_heights' => HeelHeight::all(),
             'categories' => Categories::where('category_label', '=', 'womens')->get(),
             'filters' => Filter::all(),
-            'banner' => Banner::all()
+            'banner' => Banner::all(),
+            'appliedFilters' => $request->only(['category_id', 'heel_height_id']), // Send applied filters to frontend
         ]);
     }
 

@@ -7,18 +7,18 @@ export default function PublicLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
     return (
-        <>
+        <div className="bg-[#f0ecdf] text-black">
             <Head title="JOJO BRAGAIS" />
-            <nav className="nav_container flex flex-1 justify-end">
-                <Link className="absolute items-center justify-center flex w-full h-24" href="/">
-                    <ApplicationLogo src="/assets/jojobragaiswhite.png" className="block h-16 w-auto fill-current text-gray-800" />
+            <nav className="flex justify-end">
+                <Link className="items-center justify-center flex w-full h-24" href="/">
+                    <ApplicationLogo src="/assets/jojoBragaisWW.png" className="block h-16 w-auto fill-current" />
                 </Link>
                 {user ? (
                     <Link
                         href={route('dashboard')}
-                        className="z-50 rounded-md px-8 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        className="absolute rounded-md px-8 py-2 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
-                        Dashboard
+                        <a className="text-black">Dashboard</a>
                     </Link>
                 ) : (
                     <div className="hidden">
@@ -39,8 +39,8 @@ export default function PublicLayout({ header, children }) {
             </nav>
 
             {/* Logo and Navigation */}
-            <header className="text-center bg-[#020E29]">
-                <nav className="flex justify-center space-x-6 text-white text-lg">
+            <header className="text-center">
+                <nav className="flex justify-center space-x-6 text-lg">
                     <a href="/" className="hover:underline">
                         Womens
                     </a>
@@ -53,13 +53,36 @@ export default function PublicLayout({ header, children }) {
                 </nav>
             </header>
 
-            <div className="w-full overflow-hidden bg-[#020E29] shadow-md">
+            <div className="w-full overflow-hidden shadow-md">
                 {children}
             </div>
 
+            <div className="w-full bg-black flex flex-col justify-center items-center text-center h-auto text-white p-8">
+                <h1 className="text-4xl font-bold mb-4">JOJO BRAGAIS - SHOECIETY INC.</h1>
+                <p className="px-6 sm:px-16 md:px-24 lg:px-40 xl:px-64 leading-relaxed text-gray-300">
+                    Jojo Bragais is a Filipino designer who is known for his uncompromising pageant shoes that masterfully
+                    combine style, power, and comfort. Initially, Jojo was a nurse but had a creative curiosity in shoes.
+                    So, he ventured into the industry only as a hobby. In fact, he opened his humble factory with only two 
+                    assistants to help him out and by only offering made-to-order daily shoes.
+                    <br /><br />
+                    It was in late 2013 when Jojo finally realized that the shoe business is his purpose. It all but took a 
+                    client who genuinely thanked him for her daughter’s special made-to-order shoes. At this point, he 
+                    understood that he liked crafting shoes for a special purpose.
+                    <br /><br />
+                    Months after, he sponsored a friend in a beauty pageant. From there, a national organization recognized 
+                    his creative artisanry. And shortly after, the universe noticed. To date, he has conquered the international 
+                    scene with his passion and hard work. In fact, he is the only Filipino shoe designer that made it to the big 
+                    leagues, even going as far as being the official sponsor of the 69th Miss Universe pageant.
+                </p>
+                
+                <div className="mt-6">
+                    <ApplicationLogo src="/assets/jojobragaiswhite.png" className="h-12" />
+                </div>
+            </div>
+
             {/* Footer */}
-            <footer className="bg-[#020E29] py-8 w-full px-6">
-                <div className="container mx-auto text-white">
+            <footer className=" py-8 w-full px-6">
+                <div className="container mx-auto ">
                     <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
                         {/* Social Media Links */}
                         <div className="sm:w-1/2 mb-6 sm:mb-0 text-center sm:text-left">
@@ -135,6 +158,6 @@ export default function PublicLayout({ header, children }) {
             </footer>
 
 
-        </>
+        </div>
     );
 }
