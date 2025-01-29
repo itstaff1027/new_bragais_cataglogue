@@ -160,7 +160,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                         className="bg-gray-300 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform w-64 flex-shrink-0"
                                     >
                                         <a
-                                            href={`/product/${product.category}/${product.product_id}`}
+                                            href={`/product/womens/${product.product_id}`}
                                         >
                                             <img
                                                 src={`${urlPath}${product.products.front_image}`}
