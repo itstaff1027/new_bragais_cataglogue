@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin', 'ip.whitelist'])->group(function () {
     Route::resource('/settings_colors', ColorController::class);
     Route::resource('/settings_categories', CategoryController::class);
     Route::resource('/settings_heel-heights', HeelHeightController::class);
@@ -66,7 +66,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin', 'ip.whitelist'])->group(function () {
     Route::resource('/inventory/products', ProductsController::class);
     Route::post('/inventory/products/variants', [ProductsController::class, 'store_variants']);
     
@@ -79,7 +79,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/inventory/warehouses', WarehouseController::class);
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function (){
+Route::middleware(['auth', 'role:admin', 'ip.whitelist'])->group(function (){
     Route::resource('/content_womens', WomenController::class);
     Route::resource('/featured_product_womens', FeaturedProduct::class);
     Route::resource('/new_arrival_product_womens', NewArrivalController::class);
@@ -96,8 +96,17 @@ Route::middleware(['auth', 'role:admin'])->group(function (){
     Route::resource('/settings_filter_products', FilterProductController::class);
 });
 
-Route::get('/settings', function () {
-    return Inertia::render('Settings/Page');
-})->middleware(['auth', 'role:admin'])->name('settings');
+Route::middleware(['auth', 'role:admin', 'ip.whitelist'])->group(function (){
+    Route::get('/settings', function () {
+        return Inertia:: render('Settings/Page');
+    })->name('settings');
+    Route::get('/inventory', function () {
+        return Inertia:: render('Inventory/Page');
+    })->name('inventory');
+    Route::get('/content_management', function () {
+        return Inertia:: render('Contents/Page');
+    })->name('content_management');
+});
+
 
 require __DIR__.'/auth.php';

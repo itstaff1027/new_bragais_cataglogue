@@ -14,7 +14,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:10,1', 'ip.whitelist'])->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
     //     ->name('register');
 
@@ -38,7 +38,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:10,1'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

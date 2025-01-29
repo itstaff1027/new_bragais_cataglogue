@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Link, usePage, router } from "@inertiajs/react";
-import InventoryLayout from '@/Layouts/InventoryLayout';
+import ContentManagementLayout from '@/Layouts/ContentManagementLayout';
 
-const Inventory= ({ sizes }) => {
+const ContentManagement= ({ sizes }) => {
 
     return (
-        <InventoryLayout
+        <ContentManagementLayout
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Inventory
+                    Content Management
                 </h2>
             }
         >
-            Inventory
-        </InventoryLayout>
+            CMS
+        </ContentManagementLayout>
     );
 };
 
-export default Inventory;
+export default ContentManagement;

@@ -7,56 +7,27 @@ import { useEffect, useState } from 'react';
 import AuthenticatedLayout from './AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function SettingsLayout({ header, children }) {
+export default function ContentManagementLayout({ header, children }) {
     
     const paths = [
-        {
-            'id': '0',
-            'name': 'Settings',
-            'route': 'settings'
-        },
-        {
-            'id': '1',
-            'name': 'Colors',
-            'route': 'settings_colors.index'
-        },
-        {
-            'id': '2',
-            'name': 'Sizes',
-            'route': 'settings_sizes.index'
-        },
-        {
-            'id': '3',
-            'name': 'Heel Heights',
-            'route': 'settings_heel-heights.index'
-        },
-        {
-            'id': '4',
-            'name': 'Categories',
-            'route': 'settings_categories.index'
-        },
-        // {
-        //     'id': '5',
-        //     'name': 'Order Types',
-        //     'route': 'create-order-types'
-        // },
-        // {
-        //     'id': '6',
-        //     'name': 'Page Sections',
-        //     'route': 'page_sections'
-        // }
-        
+        { id: '0', name: 'CMS', route: 'content_management' },
+        { id: '1', name: 'Womens Main Page CMS', route: 'content_womens.index' },
+        { id: '2', name: 'Womens Featured Products CMS', route: 'featured_product_womens.index' },
+        { id: '3', name: 'Womens New Arrival CMS', route: 'new_arrival_product_womens.index' },
+        { id: '4', name: 'Set Filter Options CMS', route: 'settings_filters.index' },
+        { id: '5', name: 'Womens Filter Items CMS', route: 'settings_filter_products.index' },
+        { id: '6', name: 'Banner', route: 'content_banners.index' }
     ];
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Settings
+                    Content Management
                 </h2>
             }
         >
-            <Head title="Settings" />
+            <Head title="Content Management" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -64,7 +35,7 @@ export default function SettingsLayout({ header, children }) {
                         <div className="p-6 text-gray-900">
                             <div className="flex flex-wrap gap-3 justify-center sm:justify-start p-4">
                                 {paths.map((path, i) => (
-                                    <ResponsiveNavLink 
+                                    <ResponsiveNavLink
                                         href={route(`${path.route}`)}
                                         active={route().current(`${path.route}`)}
                                         key={i}
@@ -74,14 +45,7 @@ export default function SettingsLayout({ header, children }) {
                                     </ResponsiveNavLink>
                                 ))}
                             </div>
-                            {/* {header && (
-                                <header className="bg-white shadow">
-                                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                                        {header}
-                                    </div>
-                                </header>
-                            )} */}
-            
+
                             <main>{children}</main>
                         </div>
                     </div>
