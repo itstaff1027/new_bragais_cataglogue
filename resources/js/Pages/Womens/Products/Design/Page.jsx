@@ -6,9 +6,9 @@ import { urlPath } from "@/Components/Constants/Value";
 
 export default function Womens({ product }) {
 
-    useEffect(() => {   
-        console.log(product);
-    }, []);
+    // useEffect(() => {   
+    //     console.log(product);
+    // }, []);
 
     const adultPageantSizes = [
         {'id': 0, 'us': 5, 'length_in': 8.5, 'round_cm': 20},

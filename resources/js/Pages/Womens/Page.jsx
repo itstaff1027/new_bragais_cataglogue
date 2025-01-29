@@ -10,9 +10,9 @@ export default function Womens({ featured_images, featured_products, new_arrival
         setActiveFilter(filter_id); // Update the active filter
     };
 
-    useEffect(() => {
-        console.log(featured_products);
-    }, []);
+    // useEffect(() => {
+    //     console.log(featured_products);
+    // }, []);
 
     return (
         <PublicLayout
