@@ -22,7 +22,8 @@ class IpWhitelist
         // '10.0.*.*',      // Another local range
         // '203.0.113.45',  // Public IP of your Wi-Fi router
         // '127.0.0.1',     // Localhost
-        '180.191.166.35'
+        '180.191.166.35',
+        '180.190.31.193'
     ];
     /**
      * Handle an incoming request.
