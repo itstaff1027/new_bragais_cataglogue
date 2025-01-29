@@ -27,15 +27,15 @@ class SecurityHeaders
         $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
         // Correct way to add multiple CSP sources
-//         $csp = "
-//     default-src 'self'; 
-//     script-src 'self' https://cdnjs.cloudflare.com https://ajax.googleapis.com; 
-//     style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.bunny.net; 
-//     img-src 'self' data: https://your-image-cdn.com; 
-//     font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.bunny.net;
-//     connect-src 'self';
-// ";
-// $response->headers->set('Content-Security-Policy', trim(preg_replace('/\s+/', ' ', $csp)));
+        $csp = "
+            default-src 'self'; 
+            script-src 'self' https://cdnjs.cloudflare.com https://ajax.googleapis.com; 
+            style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.bunny.net; 
+            img-src 'self' data: https://your-image-cdn.com; 
+            font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://fonts.bunny.net;
+            connect-src 'self';
+        ";
+        $response->headers->set('Content-Security-Policy', trim(preg_replace('/\s+/', ' ', $csp)));
 
     
     
