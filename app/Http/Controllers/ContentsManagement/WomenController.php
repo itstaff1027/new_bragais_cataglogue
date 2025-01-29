@@ -46,7 +46,7 @@ class WomenController extends Controller
         ]);
     
         $uploadedImage = $request->file('image');
-        $imagePath = Storage::disk('do')->putFileAs('content_images', $uploadedImage, $uploadedImage->getClientOriginalName());
+        $imagePath = Storage::disk('do')->putFile('content_images', $uploadedImage);
     
         FeaturedImage::create([
             'section_name' => $request->section_name,

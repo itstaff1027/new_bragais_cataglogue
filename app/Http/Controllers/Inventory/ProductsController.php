@@ -52,7 +52,7 @@ class ProductsController extends Controller
         ]);
     
         $uploadedFrontImage = $request->file('front_image');
-        $frontImagePath = Storage::disk('do')->putFileAs('product_images', $uploadedFrontImage, $uploadedFrontImage->getClientOriginalName());
+        $frontImagePath = Storage::disk('do')->putFile('product_images', $uploadedFrontImage);
     
         $product = Product::create([
             'product_name' => $validated['product_name'],
@@ -66,7 +66,7 @@ class ProductsController extends Controller
         $galleryImages = $request->file('gallery_images');
         $galleryImageData = [];
         foreach ($galleryImages as $image) {
-            $path = Storage::disk('do')->putFileAs('gallery_images', $image, $image->getClientOriginalName());
+            $path = Storage::disk('do')->putFile('gallery_images', $image);
             $galleryImageData[] = ['image_path' => $path, 'is_active' => true];
         }
     

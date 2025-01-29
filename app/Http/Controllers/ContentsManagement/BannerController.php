@@ -54,7 +54,7 @@ class BannerController extends Controller
         // dd($request);
     
         $uploadedImage = $request->file('image');
-        $imagePath = Storage::disk('do')->putFileAs('banner_image', $uploadedImage, $uploadedImage->getClientOriginalName());
+        $imagePath = Storage::disk('do')->putFile('banner_image', $uploadedImage);
     
         Banner::create([
             'banner_title' => $request->name,
