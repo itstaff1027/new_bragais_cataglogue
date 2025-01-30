@@ -8,9 +8,10 @@ export default function AllWomensProducts({ products, heel_heights, categories, 
     const [selectedHeelHeight, setSelectedHeelHeight] = useState(appliedFilters.heel_height_id || '');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    // useEffect(() => {
-    //     console.log("Filters Applied:", { selectedCategory, selectedHeelHeight });
-    // }, [selectedCategory, selectedHeelHeight]);
+    useEffect(() => {
+        // console.log("Filters Applied:", { selectedCategory, selectedHeelHeight });
+        console.log(products);
+    }, [selectedCategory, selectedHeelHeight]);
 
     // Handle Filtering & Fetch Data
     const handleFilter = () => {
@@ -107,7 +108,7 @@ export default function AllWomensProducts({ products, heel_heights, categories, 
                             products.data.map((product, i) => (
                                 <div key={i} className="bg-white rounded-lg shadow-md">
                                     <a href={`/product/womens/${product.id}`}>
-                                        <img src={`${urlPath}${product.front_image}`} alt={product.product_name} className="h-auto w-full" />
+                                        <img src={`${product.front_image}`} alt={product.product_name} className="h-auto w-full" />
                                     </a>
                                     <div className="p-4">
                                         <a href={`/product/womens/${product.id}`} className="hover:underline">
@@ -148,7 +149,7 @@ export default function AllWomensProducts({ products, heel_heights, categories, 
                             className={`mt-12 w-full h-auto p-8 flex justify-center items-center ${data.text_color} ${data.bg_color}`}
                         >
                             <img
-                                src={`${urlPath}${data.image_path}`}
+                                src={`${data.image_path}`}
                                 alt={`Banner ${i}`}
                                 className="w-full max-w-none h-auto object-cover"
                             />

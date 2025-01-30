@@ -29,7 +29,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     .map((top_image, i) => (
                         <section key={i} className="relative mt-8">
                             <img
-                                src={`${urlPath}${top_image.image_path}`}
+                                src={`${top_image.image_path}`}
                                 alt={`Top Section ${i}`}
                                 className="relative inset-0 w-full h-auto object-cover"
                             />
@@ -51,7 +51,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                         href={`/product/${featured_product.category}/${featured_product.product_id}`}
                                     >
                                         <img
-                                            src={`${urlPath}${featured_product.products.front_image}`}
+                                            src={`${featured_product.products.front_image}`}
                                             alt={`Featured Product ${i}`}
                                             className="rounded-t-lg h-auto w-full object-cover"
                                         />
@@ -89,7 +89,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                         href={`/product/${new_arrival.category}/${new_arrival.product_id}`}
                                     >
                                         <img
-                                            src={`${urlPath}${new_arrival.products.front_image}`}
+                                            src={`${new_arrival.products.front_image}`}
                                             alt={`New Arrival ${i}`}
                                             className="rounded-t-lg h-auto w-full object-cover"
                                         />
@@ -117,7 +117,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     .map((body_image, i) => (
                         <section key={i} className="relative mt-8">
                             <img
-                                src={`${urlPath}${body_image.image_path}`}
+                                src={`${body_image.image_path}`}
                                 alt={`Body Section ${i}`}
                                 className="relative inset-0 w-full h-auto object-cover"
                             />
@@ -163,7 +163,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                             href={`/product/womens/${product.product_id}`}
                                         >
                                             <img
-                                                src={`${urlPath}${product.products.front_image}`}
+                                                src={`${product.products.front_image}`}
                                                 alt="Product"
                                                 className="h-auto w-full object-cover"
                                             />
@@ -205,7 +205,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                         className={`flex w-full h-auto justify-center items-center ${data.text_color} ${data.bg_color}`}
                     >
                         <img
-                            src={`${urlPath}${data.image_path}`}
+                            src={`${data.image_path}`}
                             alt={`Banner ${i}`}
                             className="w-full h-auto object-cover"
                         />

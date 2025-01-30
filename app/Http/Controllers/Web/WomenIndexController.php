@@ -9,6 +9,7 @@ use App\Models\HeelHeight;
 use Illuminate\Http\Request;
 use App\Models\FilterProduct;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Models\ContentsManagement\Banner;
 use App\Models\ContentsManagement\NewArrival;
 use App\Models\ContentsManagement\FeaturedImage;
@@ -21,6 +22,8 @@ class WomenIndexController extends Controller
      */
     public function index()
     {
+        $imageUrl = Storage::disk('do')->url('/');
+
         $featuredImages = FeaturedImage::where('category', '=', 'womens')
         ->get(columns: [
             'image_path', 
@@ -30,6 +33,11 @@ class WomenIndexController extends Controller
             'description_1',
             'description_2'
         ]);
+
+        // dd($featuredImages);
+        foreach($featuredImages as $featuredImage){
+            $featuredImage->image_path = $imageUrl . $featuredImage->image_path;
+        }
 
         $FeaturedProducts = ContentsManagementFeaturedProduct::with(['products', 'products:id,product_name,front_image' ])
         ->where('category', '=', 'womens')
@@ -43,6 +51,12 @@ class WomenIndexController extends Controller
             'description_2'
         ]);
 
+        // dd($FeaturedProducts);
+
+        foreach($FeaturedProducts as $FeaturedProduct){
+            $FeaturedProduct->products->front_image= $imageUrl . $FeaturedProduct->products->front_image; 
+        }
+
         $NewArrivals = NewArrival::with(['products', 'products:id,product_name,front_image' ])
         ->where('category', '=', 'womens')
         ->get([
@@ -54,6 +68,12 @@ class WomenIndexController extends Controller
             'description_1',
             'description_2'
         ]);
+
+        // dd($NewArrivals);
+
+        foreach($NewArrivals as $NewArrival){
+            $NewArrival->products->front_image= $imageUrl . $NewArrival->products->front_image; 
+        }
         
         $filteredProducts = FilterProduct::with(['products', 'products:id,product_name,front_image', 'filters', 'filters:id,filter_name,category'])
         // ->where('filters:id,category', '=', 'womens')
@@ -115,23 +135,33 @@ class WomenIndexController extends Controller
             'categories:id,category_name,category_label',
             'galleryImages:id,product_id,image_path'
         ]);
-    
+
         // Apply category filter
         if ($request->has('category_id') && $request->category_id) {
             $query->whereHas('categories', function ($q) use ($request) {
                 $q->where('categories.id', $request->category_id);
             });
         }
-    
+
         // Apply heel height filter
         if ($request->has('heel_height_id') && $request->heel_height_id) {
             $query->whereHas('heelHeights', function ($q) use ($request) {
                 $q->where('heel_heights.id', $request->heel_height_id);
             });
         }
-    
+
+        $imageUrl = Storage::disk('do')->url('/'); // Ensure proper URL formatting
+
         $products = $query->paginate(12)->appends($request->query()); // Maintain filter parameters in pagination links
-    
+
+        // Modify each product's galleryImages without affecting pagination
+        foreach ($products->items() as $product) {
+            $product->front_image = $imageUrl . $product->front_image;
+            foreach ($product->galleryImages as $galleryImage) {
+                $galleryImage->image_path = $imageUrl . $galleryImage->image_path;
+            }
+        }
+
         return inertia('Womens/Products/Page', [
             'products' => $products,
             'heel_heights' => HeelHeight::all(),
@@ -141,6 +171,7 @@ class WomenIndexController extends Controller
             'appliedFilters' => $request->only(['category_id', 'heel_height_id']), // Send applied filters to frontend
         ]);
     }
+
 
     public function show_product(string $category, string $id)
     {
