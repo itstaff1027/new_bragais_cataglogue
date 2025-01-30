@@ -29,7 +29,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                     .map((top_image, i) => (
                         <section key={i} className="relative mt-8">
                             <img
-                                src={`${top_image.image_path}`}
+                                src={`https://catalogue.jojobragais.com/assests/jojobragaiswhite.png`}
                                 alt={`Top Section ${i}`}
                                 className="relative inset-0 w-full h-auto object-cover"
                             />
