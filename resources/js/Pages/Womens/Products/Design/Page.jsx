@@ -58,7 +58,7 @@ export default function Womens({ product }) {
                             {product.gallery_images.map((image, index) => (
                                 <img 
                                     key={index} 
-                                    src={`${urlPath}${image.image_path}`}
+                                    src={`${image.image_path}`}
                                     alt="Product" 
                                     className="w-full h-auto object-cover rounded-lg shadow-md hover:scale-105 transition-transform"
                                 />
@@ -162,7 +162,7 @@ export default function Womens({ product }) {
                                         <th className="py-2 px-4 border-b border-gray-600">Length (cm)</th>
                                         <th className="py-2 px-4 border-b border-gray-600">Round (cm)</th>
                                     </tr>
-                                </thead>
+                                </thead> 
                                 <tbody>
                                     {euroPageantSizes.map((size) => (
                                         <tr key={size.id} className="hover:bg-white transition-colors">

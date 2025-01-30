@@ -22,7 +22,8 @@ class WomenIndexController extends Controller
      */
     public function index()
     {
-        $imageUrl = Storage::disk('do')->endpoint('/');
+        $imageUrl = Storage::disk('do')->url('/');
+        // dd($imageUrl);
 
         $featuredImages = FeaturedImage::where('category', '=', 'womens')
         ->get(columns: [
@@ -37,6 +38,7 @@ class WomenIndexController extends Controller
         // dd($featuredImages);
         foreach($featuredImages as $featuredImage){
             $featuredImage->image_path = $imageUrl . $featuredImage->image_path;
+            // dd($featuredImage->image_path);
         }
 
         $FeaturedProducts = ContentsManagementFeaturedProduct::with(['products', 'products:id,product_name,front_image' ])
@@ -87,7 +89,17 @@ class WomenIndexController extends Controller
             'description_2'
         ]);
 
-        // $banner = Banner::all();
+        foreach($filteredProducts as $filteredProduct){
+            $filteredProduct->products->front_image= $imageUrl . $filteredProduct->products->front_image; 
+        }
+
+        $banners = Banner::all();
+
+        // dd($banners);
+
+        foreach($banners as $banner){
+            $banner->image_path = $imageUrl . $banner->image_path; 
+        }
 
         // dd($filteredProducts);
 
@@ -97,7 +109,7 @@ class WomenIndexController extends Controller
             'new_arrivals' => $NewArrivals,
             'filtered_products' => $filteredProducts,
             'filters' => Filter::all(),
-            'banner' => Banner::all()
+            'banner' => $banners
         ]);
     }
 
@@ -150,7 +162,7 @@ class WomenIndexController extends Controller
             });
         }
 
-        $imageUrl = Storage::disk('do')->endpoint('/'); // Ensure proper URL formatting
+        $imageUrl = Storage::disk('do')->url('/'); // Ensure proper URL formatting
 
         $products = $query->paginate(12)->appends($request->query()); // Maintain filter parameters in pagination links
 
@@ -176,7 +188,7 @@ class WomenIndexController extends Controller
     public function show_product(string $category, string $id)
     {
 
-        $product = Product::with([
+        $query = Product::with([
             'colors',
             'colors:id,color_name,hex',
             'sizes',
@@ -193,10 +205,64 @@ class WomenIndexController extends Controller
         ->findOrFail($id, [
             'id',
             'product_name',
-            'status',
+            'status',   
             'front_image',
             'description'
         ]);
+
+        $imageUrl = Storage::disk('do')->url('/');
+
+        // dd($query);
+
+        $product = [
+            "id" => $query->id,
+            "product_name" => $query->product_name,
+            "status" => $query->status,
+            "front_image" => $imageUrl . $query->front_image,
+            "description" => $query->description,
+            "colors" => $query->colors->map(function ($color) {
+                return [
+                    'id' => $color->id,
+                    'color_name' => $color->color_name,
+                    'hex' => $color->hex,
+                ];
+            }),
+            "sizes" => $query->sizes->map(function ($size) {
+                return [
+                    'id' => $size->id,
+                    'size_name' => $size->size_name,
+                    'size_values' => $size->sizeValues->map(function ($values) {
+                        return [
+                            'id' => $values->id,
+                            'size_values' => $values->size_values,
+                            'size_id' => $values->size_id
+                        ];
+                    })
+                ];
+            }),
+            "heel_heights" => $query->heelHeights->map(function ($heelHeight) {
+                return [
+                    'id' => $heelHeight->id,
+                    'name' => $heelHeight->name,
+                    'value' => $heelHeight->value,
+                ];
+            }),
+            "categories" => $query->categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'category_name' => $category->category_name,
+                    'category_label' => $category->category_label,
+                ];
+            }),
+            "gallery_images" => $query->galleryImages->map(function ($galleryImage) {
+                $imageUrl = Storage::disk('do')->url('/');
+                return [
+                    'id' => $galleryImage->id,
+                    'product_id' => $galleryImage->product_id,
+                    'image_path' => $imageUrl . $galleryImage->image_path,
+                ];
+            }),
+        ];
         
 
         // dd($product);

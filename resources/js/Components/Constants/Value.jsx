@@ -1,4 +1,4 @@
-export const urlPath = 'https://jojobragais.catalogue.sgp1.digitaloceanspaces.com/' 
+export const urlPath = 'https://sgp1.digitaloceanspaces.com/jojobragais.catalogue/' 
 
 export const womens = 'womens';
 export const mens = 'mens';

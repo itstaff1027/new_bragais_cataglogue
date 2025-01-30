@@ -171,7 +171,7 @@ export default function Womens({ featured_images, featured_products, new_arrival
                                         <div className="p-4">
                                             {product.products.product_name && (
                                                 <a
-                                                    href={`/product/${product.category}/${product.product_id}`}
+                                                    href={`/product/womens/${product.product_id}`}
                                                     className="hover:underline"
                                                 >
                                                     <h1 className="text-lg font-semibold text-gray-800">
