@@ -22,7 +22,7 @@ class WomenIndexController extends Controller
      */
     public function index()
     {
-        $imageUrl = Storage::disk('do')->url('/');
+        $imageUrl = Storage::disk('do')->endpoint('/');
 
         $featuredImages = FeaturedImage::where('category', '=', 'womens')
         ->get(columns: [
@@ -150,7 +150,7 @@ class WomenIndexController extends Controller
             });
         }
 
-        $imageUrl = Storage::disk('do')->url('/'); // Ensure proper URL formatting
+        $imageUrl = Storage::disk('do')->endpoint('/'); // Ensure proper URL formatting
 
         $products = $query->paginate(12)->appends($request->query()); // Maintain filter parameters in pagination links
 
